@@ -9,10 +9,13 @@ const getNegativeFlag = input => input[0]
 const getZeroFlag = input => input.includes(1) ? 0 : 1
 
 const toBinaryArray = (input, mode) => {
-  if (mode === SIGNED) {
-    return input.split('').map(i => i === '1' ? 0 : 1)
+  input = input.split('').map(i => parseInt(i))
+  
+  if (mode === SIGNED && input[0] === 1) {
+    return input.map(i => i === 1 ? 0 : 1)
   }
-  return input.split('').map(parseInt)
+
+  return input
 }
 
 export const exec = (a, b, operation, mode) => {
