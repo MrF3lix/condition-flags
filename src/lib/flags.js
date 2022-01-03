@@ -39,7 +39,7 @@ export const binToDec = (binaryValue, binaryLength, isSigned) => {
 }
 
 
-export const exec = (a, b, operation, mode) => {
+export const exec = (a, b, operation, mode, registryLength) => {
   a = toBinaryArray(a, mode)
   b = toBinaryArray(b, mode)
 
@@ -47,7 +47,7 @@ export const exec = (a, b, operation, mode) => {
   let n = getNegativeFlag(result)
   let z = getZeroFlag(result)
 
-  return { n, z, c, v, result: result.join(''), mode, operation }
+  return { n, z, c, v, result: result.join(''), mode, operation, registryLength }
 }
 
 export const decToBin = (decVal, binaryLength) => {

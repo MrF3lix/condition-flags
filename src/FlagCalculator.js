@@ -18,7 +18,7 @@ export const FlagCalculator = () => {
 
   const submit = e => {
     e.preventDefault()
-    setFlags(Flags.exec(a, b, operation, mode))
+    setFlags(Flags.exec(a, b, operation, mode, registryLength))
   }
 
   useEffect(() => {
@@ -124,43 +124,50 @@ export const FlagCalculator = () => {
             <tr>
               <th>Flag</th>
               <th>Value</th>
+              <th>Note</th>
             </tr>
           </thead>
           <tbody>
+            {flags ?
+              <>
+                <tr>
+                  <th>N</th>
+                  <td>{flags.n}</td>
+                  <td>{flags.n === 1 ? 'Result is negative' : 'Result is positive'} </td>
+                </tr>
+                <tr>
+                  <th>Z</th>
+                  <td>{flags.z}</td>
+                  <td>{flags.z === 1 ? 'Result is zero' : 'Result is not zero'} </td>
+                </tr>
+                <tr>
+                  <th>C</th>
+                  <td>{flags.c}</td>
+                  <td>{flags.mode === Flags.UNSIGNED ? 'Carry' : 'Irrelevant for signed operations'}</td>
+                </tr>
+                <tr>
+                  <th>V</th>
+                  <td>{flags.v}</td>
+                  <td>{flags.mode === Flags.SIGNED ? 'Overflow' : 'Irrelevant for unsigned operations'}</td>
+                </tr>
+                <tr>
+                  <th>Mode</th>
+                  <td colSpan={2}>{flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned'}</td>
+                </tr>
+                <tr>
+                  <th>Operation</th>
+                  <td colSpan={2}>{flags.operation === Flags.ADD ? 'ADD' : 'SUB'}</td>
+                </tr>
+                <tr>
+                  <th>Result</th>
+                  <td>{flags.result}</td><td>{Flags.binToDec(flags.result, flags.registryLength, flags.mode === Flags.SIGNED)}</td>
+                </tr>
+              </>
+            :
             <tr>
-              <th>N</th>
-              <td>{flags && flags.n}</td>
-            </tr>
-            <tr>
-              <th>Z</th>
-              <td>{flags && flags.z}</td>
-            </tr>
-            <tr>
-              <th>C</th>
-              <td>{flags && flags.c}</td>
-            </tr>
-            <tr>
-              <th>V</th>
-              <td>{flags && flags.v}</td>
-            </tr>
-            <tr>
-              <th>Mode</th>
-              <td>{flags ? flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned' : ''}</td>
-            </tr>
-            <tr>
-              <th>Operation</th>
-              <td>{flags ? flags.operation === Flags.ADD ? 'ADD' : 'SUB' : ''}</td>
-            </tr>
-            <tr>
-              <th>Result</th>
-              <td>{flags && flags.result}</td>
-            </tr>
-            <tr>
-              <th>Result Decimal</th>
-              <td>{flags && Flags.binToDec(flags.result, registryLength, flags.mode === Flags.SIGNED)}</td>
-              {/* <td>{flags && parseInt(flags.result, 2) * (flags.result.startsWith('1') ? -1 : 1)}</td> */}
-              {/* <td>{flags && bin2Dec(flags.result.join(''), registryLength, mode == Flags.SIGNED).toString()}</td> */}
-            </tr>
+              <td colSpan={3}>No results available</td>
+            </tr>  
+          }
           </tbody>
         </table>
       </div>
