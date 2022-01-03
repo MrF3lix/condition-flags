@@ -23,7 +23,7 @@ export const FlagCalculator = () => {
 
   useEffect(() => {
     if (mode === Flags.SIGNED) {
-      setMin(Math.pow(-2, (registryLength - 1)))
+      setMin(-1 * Math.pow(2, (registryLength - 1)))
       setMax(Math.pow(2, (registryLength - 1)) - 1)
     } else {
       setMin(0)
@@ -92,7 +92,7 @@ export const FlagCalculator = () => {
           <div className="input__container">
             <label>
               <span>Operand A Binary</span>
-              <input type="text" onChange={e => onChangeA(e.target.value, 2)} value={a} />
+              <input type="text" pattern={`[01]{${registryLength}}`} onChange={e => onChangeA(e.target.value, 2)} value={a} />
             </label>
             <label>
               <span>Operand A Decimal ({min},{max})</span>
@@ -103,7 +103,7 @@ export const FlagCalculator = () => {
             <label>
               <span>Operand B Binary</span>
 
-              <input type="text" onChange={e => onChangeB(e.target.value, 2)} value={b} />
+              <input type="text" pattern={`[01]{${registryLength}}`} onChange={e => onChangeB(e.target.value, 2)} value={b} />
             </label>
             <label>
               <span>Operand B Decimal ({min},{max})</span>
