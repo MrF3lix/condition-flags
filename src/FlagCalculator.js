@@ -2,7 +2,7 @@ import { useState } from 'react'
 import * as Flags from './lib/flags'
 
 export const FlagCalculator = () => {
-  const [flags, setFlags] = useState({ n: 0, z: 0, c: 0, v: 0, result: 0 })
+  const [flags, setFlags] = useState()
   const [mode, setMode] = useState(0)
   const [operation, setOperation] = useState(0)
 
@@ -11,15 +11,11 @@ export const FlagCalculator = () => {
 
   const submit = e => {
     e.preventDefault()
-
-    const resultFlags = Flags.exec(a, b, operation, mode);
-    setFlags(resultFlags)
+    setFlags(Flags.exec(a, b, operation, mode))
   }
 
   const reset = () => {
-    setMode(0)
-    setOperation(0)
-    setFlags({ n: 0, z: 0, c: 0, v: 0, result: 0 })
+    setFlags()
   }
 
   return (
@@ -44,7 +40,6 @@ export const FlagCalculator = () => {
               <select onChange={e => setOperation(parseInt(e.target.value))} value={operation}>
                 <option value={Flags.ADD}>ADD</option>
                 <option value={Flags.SUB}>SUB</option>
-                <option value={Flags.MUL}>MUL</option>
               </select>
             </label>
           </div>
@@ -81,32 +76,35 @@ export const FlagCalculator = () => {
           <tbody>
             <tr>
               <th>N</th>
-              <td>{flags.n}</td>
+              <td>{flags && flags.n}</td>
             </tr>
             <tr>
               <th>Z</th>
-              <td>{flags.z}</td>
+              <td>{flags && flags.z}</td>
             </tr>
             <tr>
               <th>C</th>
-              <td>{flags.c}</td>
+              <td>{flags && flags.c}</td>
             </tr>
             <tr>
               <th>V</th>
-              <td>{flags.v}</td>
+              <td>{flags && flags.v}</td>
             </tr>
             <tr>
               <th>Mode</th>
-              <td>{flags.mode === 0 ? 'Signed' : 'Unsigned'}</td>
+              <td>{flags ? flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned' : ''}</td>
+            </tr>
+            <tr>
+              <th>Operation</th>
+              <td>{flags ? flags.operation === Flags.ADD ? 'ADD' : 'SUB' : ''}</td>
             </tr>
             <tr>
               <th>Result</th>
-              <td>{flags.result}</td>
+              <td>{flags && flags.result}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   )
-
 }

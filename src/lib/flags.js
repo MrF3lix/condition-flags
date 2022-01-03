@@ -1,6 +1,5 @@
 export const ADD = 0
 export const SUB = 1
-export const MUL = 2
 
 export const SIGNED = 0
 export const UNSIGNED = 1
@@ -10,7 +9,7 @@ const getZeroFlag = input => input.includes(1) ? 0 : 1
 
 const toBinaryArray = (input, mode) => {
   input = input.split('').map(i => parseInt(i))
-  
+
   if (mode === SIGNED && input[0] === 1) {
     return input.map(i => i === 1 ? 0 : 1)
   }
@@ -22,41 +21,41 @@ export const exec = (a, b, operation, mode) => {
   a = toBinaryArray(a, mode)
   b = toBinaryArray(b, mode)
 
-  let [c, v, result] = getCarryAndOverflowFlag(a, b, operation, mode)
+  let [c, v, result] = getCarryAndOverflowFlag(a, b, operation)
   let n = getNegativeFlag(result)
   let z = getZeroFlag(result)
 
-  return { n, z, c, v, result, mode }
+  return { n, z, c, v, result, mode, operation }
 }
 
-const getCarryAndOverflowFlag = (v1, v2, op, mode) => {
+const getCarryAndOverflowFlag = (a, b, operation) => {
   let c = 0, v = 0
-  let result = new Array(v1.length)
+  let result = new Array(a.length)
 
-  if (op === 1) {
-    for (let i = 0; i < v2.length; i++) {
-      v2[i] = v2[i] === 1 ? 0 : 1
+  if (operation === SUB) {
+    for (let i = 0; i < b.length; i++) {
+      b[i] = b[i] === 1 ? 0 : 1
     }
 
     let running = 1
-    for (let i = v1.length - 1; i >= 0 && running; i--) {
-      if (v2[i] === 1) {
-        v2[i] = 0
+    for (let i = a.length - 1; i >= 0 && running; i--) {
+      if (b[i] === 1) {
+        b[i] = 0
       } else {
-        v2[i] = 0
+        b[i] = 0
         running = false
       }
     }
     if (running) {
-      v2.fill(0)
-      v2[v2.length - 1] = 1
+      b.fill(0)
+      b[b.length - 1] = 1
     }
   }
 
-  if (op === 0 || op === 1) {
-    for (let i = v1.length - 1; i >= 0; i--) {
+  if (operation === ADD || operation === SUB) {
+    for (let i = a.length - 1; i >= 0; i--) {
       v = c
-      let sum = v1[i] + v2[i] + c
+      let sum = a[i] + b[i] + c
       if (sum > 1) {
         result[i] = sum - 2
         c = 1
@@ -69,7 +68,7 @@ const getCarryAndOverflowFlag = (v1, v2, op, mode) => {
 
   v = v ^ c
 
-  if (op === 1) {
+  if (operation === SUB) {
     c = c === 1 ? 0 : 1
   }
 
