@@ -151,6 +151,11 @@ export const FlagCalculator = () => {
                   <td>{flags.mode === Flags.SIGNED ? 'Overflow' : 'Irrelevant for unsigned operations'}</td>
                 </tr>
                 <tr>
+                  <th>Carry Sequence</th>
+                  <td>{flags.cs}</td>
+                  <td>Also known as "Übertrag"</td>
+                </tr>
+                <tr>
                   <th>Mode</th>
                   <td colSpan={2}>{flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned'}</td>
                 </tr>
