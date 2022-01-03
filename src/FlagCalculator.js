@@ -22,75 +22,38 @@ export const FlagCalculator = () => {
   }
 
   useEffect(() => {
-    console.log(registryLength)
     if (mode === Flags.SIGNED) {
-      setMin(Math.pow(-2,(registryLength - 1)))
-      setMax(Math.pow(2,(registryLength - 1)))
+      setMin(Math.pow(-2, (registryLength - 1)))
+      setMax(Math.pow(2, (registryLength - 1)) - 1)
     } else {
       setMin(0)
-      setMax(Math.pow(2,registryLength)-1)
+      setMax(Math.pow(2, registryLength) - 1)
     }
+
+    onChangeA(a, 2)
+    onChangeB(b, 2)
+
   }, [registryLength, mode])
 
-  const reset = () => {
-    setFlags()
-  }
+  const reset = () => setFlags()
 
-  const secondComplement = (val, registryLength) => {
-    val = (~val + 1)
-    let valString = val.toString(2)
-
-
-    while (valString.length < registryLength) {
-      valString = "0" + valString
+  const onChangeInput = (value, base, setBinary, setDecimal) => {
+    if (base === 10) {
+      setDecimal(value)
+      setBinary(Flags.decToBin(value, registryLength))
+    } else {
+      setDecimal(Flags.binToDec(value, registryLength, mode === Flags.SIGNED))
+      setBinary(value)
     }
-
-    return valString.substring(valString.length - registryLength)
-  }
-
-  const dec2bin = (val, registryLength) => {
-    val = (val >>> 0)
-    let valString = val.toString(2)
-
-
-    while (valString.length < registryLength) {
-      valString = "0" + valString
-    }
-
-    return valString.substring(valString.length - registryLength)
   }
 
   const onChangeA = (value, base) => {
-    if (mode === Flags.SIGNED && value.startsWith('1')) {
-      value = secondComplement(value)
-    }
-
-    let decimalValue = parseInt(value, base)
-
-    if (base === 10) {
-      setA(dec2bin(value, registryLength))
-    } else {
-      setA(value)
-    }
-    setADec(decimalValue)
+    onChangeInput(value, base, setA, setADec)
   }
 
   const onChangeB = (value, base) => {
-    if (mode === Flags.SIGNED && value.startsWith('1')) {
-      value = secondComplement(value)
-    }
-
-
-    let decimalValue = parseInt(value, base)
-
-    if (base === 10) {
-      setB(dec2bin(value, registryLength))
-    } else {
-      setB(value)
-    }
-    setBDec(decimalValue)
+    onChangeInput(value, base, setB, setBDec)
   }
-
   return (
     <div className="row">
       <div className="col">
@@ -129,7 +92,7 @@ export const FlagCalculator = () => {
             </label>
             <label>
               <span>Operand A Decimal ({min},{max})</span>
-              <input type="number" onChange={e => onChangeA(e.target.value, 10)} value={aDec} min={min} max={max}/>
+              <input type="number" onChange={e => onChangeA(e.target.value, 10)} value={aDec} min={min} max={max} />
             </label>
           </div>
           <div className="input__container">
@@ -140,7 +103,7 @@ export const FlagCalculator = () => {
             </label>
             <label>
               <span>Operand B Decimal ({min},{max})</span>
-              <input type="number" onChange={e => onChangeB(e.target.value, 10)} value={bDec} min={min} max={max}/>
+              <input type="number" onChange={e => onChangeB(e.target.value, 10)} value={bDec} min={min} max={max} />
             </label>
           </div>
           <div className="input__container">
@@ -190,7 +153,9 @@ export const FlagCalculator = () => {
             </tr>
             <tr>
               <th>Result Decimal</th>
-              <td>{flags && parseInt(flags.result.join(''), 2).toString()}</td>
+              <td>{flags && Flags.binToDec(flags.result, registryLength, flags.mode === Flags.SIGNED)}</td>
+              {/* <td>{flags && parseInt(flags.result, 2) * (flags.result.startsWith('1') ? -1 : 1)}</td> */}
+              {/* <td>{flags && bin2Dec(flags.result.join(''), registryLength, mode == Flags.SIGNED).toString()}</td> */}
             </tr>
           </tbody>
         </table>

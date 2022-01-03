@@ -119,3 +119,71 @@ res = getCarryAndOverflowFlag(v1, v2, 2)
 v1 = Array.from('10100011')
 v2 = Array.from('01100010')
 res = getCarryAndOverflowFlag(v1, v2, 2)
+
+const complement2 = function (val) {
+  let cpVal = [...val]
+  for (let i = 0; i < cpVal.length; i++) {
+      cpVal[i] = cpVal[i] == '1' ? '0' : '1'
+  }
+
+  let running = 1
+  for (let i = v1.length - 1; i >= 0 && running; i--) {
+      if (cpVal[i] == '1') {
+          cpVal[i] = '0'
+      } else {
+          cpVal[i] = '1'
+          running = false
+      }
+  }
+  if (running) {
+      cpVal.fill('0')
+      cpVal[cpVal.length - 1] = '1'
+  }
+  return cpVal
+}
+
+const decToBin = function (decVal, binaryLength) {   
+  let n = false
+  let val = decVal
+  
+  if (decVal < 0) {
+      n = true
+      val = -decVal
+  }
+
+  val = (val >>> 0).toString(2);
+  res = val.toString().split('')
+  if (res.length > binaryLength) {
+      throw new Error('Invalid binary length')
+  }
+  while(res.length < binaryLength) {
+      res.unshift('0')
+  }
+
+  if(n) {
+      res = complement2(res)
+  }
+
+  console.log(decVal + " = " + res)
+  return res
+}
+
+const binToDec = function (binVal, isSigned = false) {
+  let res
+  if (isSigned && binVal[0] == '1') {
+      res = parseInt(complement2(binVal).join(''), 2) * -1
+      console.log("BinToDec (Unsigned) (" + binVal.join('') + "): " + res)
+  } else {
+      res = parseInt(binVal.join(''), 2)
+      console.log("BinToDec   (Signed) (" + binVal.join('') + "): " + res)
+  }
+  return res
+}
+
+let val = Array.from('1010')
+binToDec(val, false)
+binToDec(val, true)
+
+//decToBin(100, 4, false)
+decToBin(10, 4, true)
+decToBin(-5, 4, true)
