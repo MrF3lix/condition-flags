@@ -82,24 +82,8 @@ const getCarryAndOverflowFlag = (a, b, operation) => {
   let c = 0, v = 0
   let result = new Array(a.length)
 
-  if (operation === SUB) {
-    for (let i = 0; i < b.length; i++) {
-      b[i] = b[i] === 1 ? 0 : 1
-    }
-
-    let running = 1
-    for (let i = a.length - 1; i >= 0 && running; i--) {
-      if (b[i] === 1) {
-        b[i] = 0
-      } else {
-        b[i] = 1
-        running = false
-      }
-    }
-    if (running) {
-      b.fill(0)
-      b[b.length - 1] = 1
-    }
+  if(operation === SUB) {
+    b = complement2(b.join(''), a.length)
   }
 
   if (operation === ADD || operation === SUB) {
