@@ -33,7 +33,7 @@ export const complement2 = (val, length) => {
 export const binToDec = (binaryValue, binaryLength, isSigned) => {
   if (isSigned && binaryValue.toString().startsWith('1')) {
     return parseInt(complement2(binaryValue, binaryLength).join(''), 2) * -1
-  } 
+  }
 
   return parseInt(binaryValue, 2)
 }
@@ -82,7 +82,7 @@ const getCarryAndOverflowFlag = (a, b, operation) => {
   let c = 0, v = 0
   let result = new Array(a.length)
 
-  if(operation === SUB) {
+  if (operation === SUB) {
     b = complement2(b.join(''), a.length)
   }
 

@@ -33,7 +33,11 @@ export const FlagCalculator = () => {
     onChangeA(a, 2)
     onChangeB(b, 2)
 
-  }, [registryLength, mode])
+  }, [mode, registryLength])
+
+  useEffect(() => {
+    setRegistryLength(a.length)
+  }, [a])
 
   const reset = () => setFlags()
 
