@@ -26,12 +26,10 @@ export const exec = (a, b, operation, mode) => {
   let n = getNegativeFlag(result)
   let z = getZeroFlag(result)
 
-  return { n, z, c, v, result }
+  return { n, z, c, v, result, mode }
 }
 
 const getCarryAndOverflowFlag = (v1, v2, op, mode) => {
-  console.log({v1, v2, op, mode})
-
   let c = 0, v = 0
   let result = new Array(v1.length)
 

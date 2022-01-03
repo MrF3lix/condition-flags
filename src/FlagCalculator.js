@@ -31,7 +31,7 @@ export const FlagCalculator = () => {
             <label>
               <span>Mode</span>
 
-              <select onChange={e => setMode(parseInt(e.target.value))} defaultValue={mode}>
+              <select onChange={e => setMode(parseInt(e.target.value))} value={mode}>
                 <option value={Flags.SIGNED}>Signed</option>
                 <option value={Flags.UNSIGNED}>Unsigned</option>
               </select>
@@ -41,7 +41,7 @@ export const FlagCalculator = () => {
             <label>
               <span>Operation</span>
 
-              <select onChange={e => setOperation(parseInt(e.target.value))} defaultValue={operation}>
+              <select onChange={e => setOperation(parseInt(e.target.value))} value={operation}>
                 <option value={Flags.ADD}>ADD</option>
                 <option value={Flags.SUB}>SUB</option>
                 <option value={Flags.MUL}>MUL</option>
@@ -96,15 +96,15 @@ export const FlagCalculator = () => {
               <td>{flags.v}</td>
             </tr>
             <tr>
+              <th>Mode</th>
+              <td>{flags.mode === 0 ? 'Signed' : 'Unsigned'}</td>
+            </tr>
+            <tr>
               <th>Result</th>
               <td>{flags.result}</td>
             </tr>
           </tbody>
         </table>
-        <h2>Raw Output</h2>
-        <div>
-          <pre><code>{JSON.stringify(flags)}</code></pre>
-        </div>
       </div>
     </div>
   )
