@@ -1,26 +1,76 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as Flags from './lib/flags'
 
 export const FlagCalculator = () => {
   const [flags, setFlags] = useState()
+  const [registryLength, setRegistryLength] = useState(4)
   const [mode, setMode] = useState(0)
   const [operation, setOperation] = useState(0)
 
-  const [a, setA] = useState('0111')
-  const [b, setB] = useState('0010')
+  const [a, setA] = useState('0000')
+  const [b, setB] = useState('0000')
 
   const [aDec, setADec] = useState(0)
-  const [bDec, setBDec] = useState(1)
+  const [bDec, setBDec] = useState(0)
 
   const submit = e => {
     e.preventDefault()
     setFlags(Flags.exec(a, b, operation, mode))
+
   }
 
   const reset = () => {
     setFlags()
   }
-  
+
+  useEffect(() => {
+    console.log(flags)
+  }, [flags])
+
+  const dec2bin = (val, registryLength) => {
+    val = (val >>> 0)
+    let valString = val.toString(2)
+
+
+    while (valString.length < registryLength){
+      valString = "0" + valString
+    }
+
+    return valString.substring(valString.length - registryLength)
+  }
+
+  const onChangeA = (value, base) => {
+    if(mode === Flags.SIGNED) {
+      // 2er complement
+      // TODO
+    }
+
+    let decimalValue = parseInt(value, base)
+
+    if(base === 10) {
+      setA(dec2bin(value, registryLength))
+    } else {
+      setA(value)
+    }
+    setADec(decimalValue)
+  }
+
+  const onChangeB = (value, base) => {
+    if(mode === Flags.SIGNED) {
+      // 2er complement
+      // TODO
+    }
+
+    let decimalValue = parseInt(value, base)
+
+    if(base === 10) {
+      setB(dec2bin(value, registryLength))
+    } else {
+      setB(value)
+    }
+    setBDec(decimalValue)
+  }
+
   return (
     <div className="row">
       <div className="col">
@@ -48,23 +98,29 @@ export const FlagCalculator = () => {
           </div>
           <div className="input__container">
             <label>
+              <span>Registry Length</span>
+              <input type="number" onChange={e => setRegistryLength(e.target.value, 2)} value={registryLength} />
+            </label>
+          </div>
+          <div className="input__container">
+            <label>
               <span>Operand A Binary</span>
-              <input type="text" onChange={e => setA(e.target.value)} value={a} />
+              <input type="text" onChange={e => onChangeA(e.target.value, 2)} value={a} />
             </label>
             <label>
               <span>Operand A Decimal</span>
-              <input type="text" onChange={e => setADec(e.target.value)} value={aDec} />
+              <input type="number" onChange={e => onChangeA(e.target.value, 10)} value={aDec} />
             </label>
           </div>
           <div className="input__container">
             <label>
               <span>Operand B Binary</span>
 
-              <input type="text" onChange={e => setB(e.target.value)} value={b} />
+              <input type="text" onChange={e => onChangeB(e.target.value, 2)} value={b} />
             </label>
             <label>
               <span>Operand B Decimal</span>
-              <input type="text" onChange={e => setBDec(e.target.value)} value={bDec} />
+              <input type="number" onChange={e => onChangeB(e.target.value, 10)} value={bDec} />
             </label>
           </div>
           <div className="input__container">
@@ -111,6 +167,10 @@ export const FlagCalculator = () => {
             <tr>
               <th>Result</th>
               <td>{flags && flags.result}</td>
+            </tr>
+            <tr>
+              <th>Result Decimal</th>
+              <td>{flags && parseInt(flags.result.join(''),2).toString()}</td>
             </tr>
           </tbody>
         </table>
