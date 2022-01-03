@@ -9,6 +9,9 @@ export const FlagCalculator = () => {
   const [a, setA] = useState('0111')
   const [b, setB] = useState('0010')
 
+  const [aDec, setADec] = useState(0)
+  const [bDec, setBDec] = useState(1)
+
   const submit = e => {
     e.preventDefault()
     setFlags(Flags.exec(a, b, operation, mode))
@@ -17,13 +20,13 @@ export const FlagCalculator = () => {
   const reset = () => {
     setFlags()
   }
-
+  
   return (
     <div className="row">
       <div className="col">
         <h2>Input</h2>
         <form onSubmit={submit}>
-          {/* <div className="input__container">
+          <div className="input__container">
             <label>
               <span>Mode</span>
 
@@ -32,7 +35,7 @@ export const FlagCalculator = () => {
                 <option value={Flags.UNSIGNED}>Unsigned</option>
               </select>
             </label>
-          </div> */}
+          </div>
           <div className="input__container">
             <label>
               <span>Operation</span>
@@ -45,16 +48,23 @@ export const FlagCalculator = () => {
           </div>
           <div className="input__container">
             <label>
-              <span>Operand A:</span>
-
+              <span>Operand A Binary</span>
               <input type="text" onChange={e => setA(e.target.value)} value={a} />
+            </label>
+            <label>
+              <span>Operand A Decimal</span>
+              <input type="text" onChange={e => setADec(e.target.value)} value={aDec} />
             </label>
           </div>
           <div className="input__container">
             <label>
-              <span>Operand B</span>
+              <span>Operand B Binary</span>
 
               <input type="text" onChange={e => setB(e.target.value)} value={b} />
+            </label>
+            <label>
+              <span>Operand B Decimal</span>
+              <input type="text" onChange={e => setBDec(e.target.value)} value={bDec} />
             </label>
           </div>
           <div className="input__container">
@@ -90,10 +100,10 @@ export const FlagCalculator = () => {
               <th>V</th>
               <td>{flags && flags.v}</td>
             </tr>
-            {/* <tr>
+            <tr>
               <th>Mode</th>
               <td>{flags ? flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned' : ''}</td>
-            </tr> */}
+            </tr>
             <tr>
               <th>Operation</th>
               <td>{flags ? flags.operation === Flags.ADD ? 'ADD' : 'SUB' : ''}</td>

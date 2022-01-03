@@ -62,12 +62,14 @@ td {
 
 input,
 select {
+  width: 100%;
   border: 1px solid lightgray;
   border-radius: 5px;
   padding: 10px 15px;
 }
 
 label {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -77,8 +79,14 @@ label span {
   font-weight: bold;
 }
 
+label+label {
+  margin: 0 0 0 10px;
+}
+
 .input__container {
+  width: 100%;
   margin: 0 0 20px 0;
+  display: flex;
 }
 
 .button {
