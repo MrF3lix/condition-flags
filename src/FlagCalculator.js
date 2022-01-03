@@ -151,10 +151,15 @@ export const FlagCalculator = () => {
                   <td>{flags.mode === Flags.SIGNED ? 'Overflow' : 'Irrelevant for unsigned operations'}</td>
                 </tr>
                 <tr>
-                  <th>Carry Sequence</th>
-                  <td>{flags.cs}</td>
-                  <td>Also known as "Übertrag"</td>
+                  <th>Carry Sequence (Übertrag)</th>
+                  <td colSpan={2}>{flags.cs}</td>
                 </tr>
+                {flags.operation === Flags.SUB &&
+                  <tr>
+                    <th>Two's complement of B (ZK)</th>
+                    <td colSpan={2}>{flags.b2c}</td>
+                  </tr>
+                }
                 <tr>
                   <th>Mode</th>
                   <td colSpan={2}>{flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned'}</td>
@@ -168,11 +173,11 @@ export const FlagCalculator = () => {
                   <td>{flags.result}</td><td>{Flags.binToDec(flags.result, flags.registryLength, flags.mode === Flags.SIGNED)}</td>
                 </tr>
               </>
-            :
-            <tr>
-              <td colSpan={3}>No results available</td>
-            </tr>  
-          }
+              :
+              <tr>
+                <td colSpan={3}>No results available</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>

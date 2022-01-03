@@ -43,11 +43,11 @@ export const exec = (a, b, operation, mode, registryLength) => {
   a = toBinaryArray(a, mode)
   b = toBinaryArray(b, mode)
 
-  let [c, v, result, cs] = getCarryAndOverflowFlag(a, b, operation)
+  let [c, v, result, cs, b2c] = getCarryAndOverflowFlag(a, b, operation)
   let n = getNegativeFlag(result)
   let z = getZeroFlag(result)
 
-  return { n, z, c, v, cs, result: result.join(''), mode, operation, registryLength }
+  return { n, z, c, v, cs, b2c, result: result.join(''), mode, operation, registryLength }
 }
 
 export const decToBin = (decVal, binaryLength) => {
@@ -79,11 +79,12 @@ export const decToBin = (decVal, binaryLength) => {
 }
 
 const getCarryAndOverflowFlag = (a, b, operation) => {
-  let c = 0, v = 0, cs = ''
+  let c = 0, v = 0, cs = '', b2c= null
   let result = new Array(a.length)
 
   if (operation === SUB) {
     b = complement2(b.join(''), a.length)
+    b2c = b.join('')
   }
 
   if (operation === ADD || operation === SUB) {
@@ -108,5 +109,5 @@ const getCarryAndOverflowFlag = (a, b, operation) => {
     c = c === 1 ? 0 : 1
   }
 
-  return [c, v, result, cs]
+  return [c, v, result, cs, b2c]
 }
