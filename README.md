@@ -1,5 +1,7 @@
 # ARM Condition Flags
 
+![Logo](https://raw.githubusercontent.com/MrF3lix/condition-flags/main/img/icon--small.png)
+
 Calculate the condition flags from simple arithmetic operations.
 
 ## About the flags
