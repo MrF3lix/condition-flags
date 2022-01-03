@@ -99,6 +99,7 @@ const getCarryAndOverflowFlag = (a, b, operation) => {
         c = 0
       }
     }
+    cs = c + cs
   }
 
   v = v ^ c
@@ -107,6 +108,5 @@ const getCarryAndOverflowFlag = (a, b, operation) => {
     c = c === 1 ? 0 : 1
   }
 
-  cs = c + cs
   return [c, v, result, cs]
 }
