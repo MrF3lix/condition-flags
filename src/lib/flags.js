@@ -47,7 +47,11 @@ export const exec = (a, b, operation, mode, registryLength) => {
   let n = getNegativeFlag(result)
   let z = getZeroFlag(result)
 
-  return { n, z, c, v, cs, b2c, result: result.join(''), mode, operation, registryLength }
+  let resultBinary = result.join('')
+  let resultDecimal = binToDec(resultBinary, registryLength, mode === SIGNED)
+  let resultHex = resultDecimal >= 0 ? '0x' + resultDecimal.toString(16) : '-0x' + resultDecimal.toString(16).substring(1)
+
+  return { n, z, c, v, cs, b2c, resultBinary, resultDecimal, resultHex, mode, operation, registryLength }
 }
 
 export const decToBin = (decVal, binaryLength) => {

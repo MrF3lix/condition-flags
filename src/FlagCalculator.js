@@ -16,6 +16,9 @@ export const FlagCalculator = () => {
   const [aDec, setADec] = useState(0)
   const [bDec, setBDec] = useState(0)
 
+  const [aHex, setAHex] = useState(0)
+  const [bHex, setBHex] = useState(0)
+
   const submit = e => {
     e.preventDefault()
     setFlags(Flags.exec(a, b, operation, mode, registryLength))
@@ -41,23 +44,37 @@ export const FlagCalculator = () => {
 
   const reset = () => setFlags()
 
-  const onChangeInput = (value, base, setBinary, setDecimal) => {
+  const onChangeInput = (value, base, setBinary, setDecimal, setHex) => {
     if (base === 10) {
       setDecimal(value)
       setBinary(Flags.decToBin(value, registryLength))
-    } else {
-      setDecimal(Flags.binToDec(value, registryLength, mode === Flags.SIGNED))
+      setHex(toHex(value))
+    } else if (base === 2) {
+      let decimal = Flags.binToDec(value, registryLength, mode === Flags.SIGNED)
+      console.log({decimal})
+      setDecimal(decimal)
       setBinary(value)
+      setHex(toHex(decimal))
+    } else if (base === 16) {
+      let decimal = parseInt(value, base)
+      setDecimal(decimal)
+      setBinary(Flags.decToBin(decimal, registryLength))
+      setHex(value)
+
     }
   }
 
   const onChangeA = (value, base) => {
-    onChangeInput(value, base, setA, setADec)
+    onChangeInput(value, base, setA, setADec, setAHex)
   }
 
   const onChangeB = (value, base) => {
-    onChangeInput(value, base, setB, setBDec)
+    onChangeInput(value, base, setB, setBDec, setBHex)
   }
+
+
+  const toHex = val => parseInt(val).toString(16)
+
   return (
     <div className="row">
       <div className="col">
@@ -89,25 +106,34 @@ export const FlagCalculator = () => {
               <input type="number" onChange={e => setRegistryLength(e.target.value, 2)} value={registryLength} />
             </label>
           </div>
+          <h3>Operand A</h3>
           <div className="input__container">
             <label>
-              <span>Operand A Binary</span>
+              <span>Binary</span>
               <input type="text" pattern={`[01]{${registryLength}}`} onChange={e => onChangeA(e.target.value, 2)} value={a} />
             </label>
             <label>
-              <span>Operand A Decimal ({min},{max})</span>
+              <span>Decimal ({min},{max})</span>
               <input type="number" onChange={e => onChangeA(e.target.value, 10)} value={aDec} min={min} max={max} />
             </label>
+            <label>
+              <span>Hex</span>
+              <input type="text" onChange={e => onChangeA(e.target.value, 16)} value={aHex} />
+            </label>
           </div>
+          <h3>Operand B</h3>
           <div className="input__container">
             <label>
-              <span>Operand B Binary</span>
-
+              <span>Binary</span>
               <input type="text" pattern={`[01]{${registryLength}}`} onChange={e => onChangeB(e.target.value, 2)} value={b} />
             </label>
             <label>
-              <span>Operand B Decimal ({min},{max})</span>
+              <span>Decimal ({min},{max})</span>
               <input type="number" onChange={e => onChangeB(e.target.value, 10)} value={bDec} min={min} max={max} />
+            </label>
+            <label>
+              <span>Hex</span>
+              <input type="text" onChange={e => onChangeB(e.target.value, 16)} value={bHex} />
             </label>
           </div>
           <div className="input__container">
@@ -124,7 +150,7 @@ export const FlagCalculator = () => {
             <tr>
               <th>Flag</th>
               <th>Value</th>
-              <th>Note</th>
+              <th colSpan={2}>Note</th>
             </tr>
           </thead>
           <tbody>
@@ -133,44 +159,46 @@ export const FlagCalculator = () => {
                 <tr>
                   <th>N</th>
                   <td>{flags.n}</td>
-                  <td>{flags.n === 1 ? 'Result is negative' : 'Result is positive'} </td>
+                  <td colSpan={2}>{flags.n === 1 ? 'Result is negative' : 'Result is positive'} </td>
                 </tr>
                 <tr>
                   <th>Z</th>
                   <td>{flags.z}</td>
-                  <td>{flags.z === 1 ? 'Result is zero' : 'Result is not zero'} </td>
+                  <td colSpan={2}>{flags.z === 1 ? 'Result is zero' : 'Result is not zero'} </td>
                 </tr>
                 <tr>
                   <th>C</th>
                   <td>{flags.c}</td>
-                  <td>{flags.mode === Flags.UNSIGNED ? 'Carry' : 'Irrelevant for signed operations'}</td>
+                  <td colSpan={2}>{flags.mode === Flags.UNSIGNED ? 'Carry / Borrow in SUB' : 'Irrelevant for signed operations'}</td>
                 </tr>
                 <tr>
                   <th>V</th>
                   <td>{flags.v}</td>
-                  <td>{flags.mode === Flags.SIGNED ? 'Overflow' : 'Irrelevant for unsigned operations'}</td>
+                  <td colSpan={2}>{flags.mode === Flags.SIGNED ? 'Overflow' : 'Irrelevant for unsigned operations'}</td>
                 </tr>
                 <tr>
                   <th>Carry Sequence (Übertrag)</th>
-                  <td colSpan={2}>{flags.cs}</td>
+                  <td colSpan={3}>{flags.cs}</td>
                 </tr>
                 {flags.operation === Flags.SUB &&
                   <tr>
                     <th>Two's complement of B (ZK)</th>
-                    <td colSpan={2}>{flags.b2c}</td>
+                    <td colSpan={3}>{flags.b2c}</td>
                   </tr>
                 }
                 <tr>
                   <th>Mode</th>
-                  <td colSpan={2}>{flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned'}</td>
+                  <td colSpan={3}>{flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned'}</td>
                 </tr>
                 <tr>
                   <th>Operation</th>
-                  <td colSpan={2}>{flags.operation === Flags.ADD ? 'ADD' : 'SUB'}</td>
+                  <td colSpan={3}>{flags.operation === Flags.ADD ? 'ADD' : 'SUB'}</td>
                 </tr>
                 <tr>
                   <th>Result</th>
-                  <td>{flags.result}</td><td>{Flags.binToDec(flags.result, flags.registryLength, flags.mode === Flags.SIGNED)}</td>
+                  <td>{flags.resultBinary}</td>
+                  <td>{flags.resultDecimal}</td>
+                  <td>{flags.resultHex}</td>
                 </tr>
               </>
               :

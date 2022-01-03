@@ -110,3 +110,12 @@ label+label {
 .button+.button {
   margin-left: 10px;
 }
+
+@media screen and (max-width: 960px) {
+  body {
+    margin: 0 0 50px 0;
+  }
+  .col {
+    width: 100%;
+  }
+}
