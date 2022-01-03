@@ -51,7 +51,6 @@ export const FlagCalculator = () => {
       setHex(toHex(value))
     } else if (base === 2) {
       let decimal = Flags.binToDec(value, registryLength, mode === Flags.SIGNED)
-      console.log({decimal})
       setDecimal(decimal)
       setBinary(value)
       setHex(toHex(decimal))
