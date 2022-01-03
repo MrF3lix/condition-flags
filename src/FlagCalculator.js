@@ -23,7 +23,7 @@ export const FlagCalculator = () => {
       <div className="col">
         <h2>Input</h2>
         <form onSubmit={submit}>
-          <div className="input__container">
+          {/* <div className="input__container">
             <label>
               <span>Mode</span>
 
@@ -32,7 +32,7 @@ export const FlagCalculator = () => {
                 <option value={Flags.UNSIGNED}>Unsigned</option>
               </select>
             </label>
-          </div>
+          </div> */}
           <div className="input__container">
             <label>
               <span>Operation</span>
@@ -45,7 +45,7 @@ export const FlagCalculator = () => {
           </div>
           <div className="input__container">
             <label>
-              <span>Operand A</span>
+              <span>Operand A:</span>
 
               <input type="text" onChange={e => setA(e.target.value)} value={a} />
             </label>
@@ -90,10 +90,10 @@ export const FlagCalculator = () => {
               <th>V</th>
               <td>{flags && flags.v}</td>
             </tr>
-            <tr>
+            {/* <tr>
               <th>Mode</th>
               <td>{flags ? flags.mode === Flags.SIGNED ? 'Signed' : 'Unsigned' : ''}</td>
-            </tr>
+            </tr> */}
             <tr>
               <th>Operation</th>
               <td>{flags ? flags.operation === Flags.ADD ? 'ADD' : 'SUB' : ''}</td>

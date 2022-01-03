@@ -1,21 +1,11 @@
 export const ADD = 0
 export const SUB = 1
-
 export const SIGNED = 0
 export const UNSIGNED = 1
 
 const getNegativeFlag = input => input[0]
 const getZeroFlag = input => input.includes(1) ? 0 : 1
-
-const toBinaryArray = (input, mode) => {
-  input = input.split('').map(i => parseInt(i))
-
-  if (mode === SIGNED && input[0] === 1) {
-    return input.map(i => i === 1 ? 0 : 1)
-  }
-
-  return input
-}
+const toBinaryArray = input => input.split('').map(i => parseInt(i))
 
 export const exec = (a, b, operation, mode) => {
   a = toBinaryArray(a, mode)
@@ -42,7 +32,7 @@ const getCarryAndOverflowFlag = (a, b, operation) => {
       if (b[i] === 1) {
         b[i] = 0
       } else {
-        b[i] = 0
+        b[i] = 1
         running = false
       }
     }
