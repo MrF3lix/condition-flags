@@ -25,6 +25,10 @@ export const FlagCalculator = () => {
   }
 
   useEffect(() => {
+    if(!a || !b) {
+      return
+    }
+
     if (mode === Flags.SIGNED) {
       setMin(-1 * Math.pow(2, (registryLength - 1)))
       setMax(Math.pow(2, (registryLength - 1)) - 1)
@@ -48,6 +52,10 @@ export const FlagCalculator = () => {
   const reset = () => setFlags()
 
   const onChangeInput = (value, base, setBinary, setDecimal, setHex) => {
+    if(!value) {
+      return
+    }
+
     if (base === 10) {
       setDecimal(value)
       setBinary(Flags.decToBin(value, registryLength))
@@ -62,7 +70,6 @@ export const FlagCalculator = () => {
       setDecimal(decimal)
       setBinary(Flags.decToBin(decimal, registryLength))
       setHex(value)
-
     }
   }
 
@@ -74,8 +81,9 @@ export const FlagCalculator = () => {
     onChangeInput(value, base, setB, setBDec, setBHex)
   }
 
-
-  const toHex = val => parseInt(val).toString(16)
+  const toHex = val => {
+    return val >= 0 ? '0x' + val.toString(16) : '-0x' + val.toString(16).substring(1)
+  }
 
   return (
     <div className="row">

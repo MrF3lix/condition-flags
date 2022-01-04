@@ -69,7 +69,7 @@ export const decToBin = (decVal, binaryLength) => {
     res = val.toString().split('')
   }
   if (res.length > binaryLength) {
-    throw new Error('Invalid binary length')
+    return -1
   }
   while (res.length < binaryLength) {
     res.unshift('0')
