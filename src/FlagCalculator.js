@@ -33,8 +33,11 @@ export const FlagCalculator = () => {
       setMax(Math.pow(2, registryLength) - 1)
     }
 
-    onChangeA(a, 2)
-    onChangeB(b, 2)
+    onChangeA(0, 10)
+    onChangeB(0, 10)
+
+    onChangeA(aDec, 10)
+    onChangeB(bDec, 10)
 
   }, [mode, registryLength])
 
