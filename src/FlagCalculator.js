@@ -101,8 +101,8 @@ export const FlagCalculator = () => {
               <span>Operation</span>
 
               <select onChange={e => setOperation(parseInt(e.target.value))} value={operation}>
-                <option value={Flags.ADD}>ADD</option>
-                <option value={Flags.SUB}>SUB</option>
+                <option value={Flags.ADD}>ADDS</option>
+                <option value={Flags.SUB}>SUBS</option>
               </select>
             </label>
           </div>
