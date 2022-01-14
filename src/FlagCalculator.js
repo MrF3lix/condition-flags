@@ -52,15 +52,11 @@ export const FlagCalculator = () => {
   const reset = () => setFlags()
 
   const onChangeInput = (value, base, setBinary, setDecimal, setHex) => {
-    if(!value) {
-      return
-    }
-
     if (base === 10) {
       setDecimal(value)
       setBinary(Flags.decToBin(value, registryLength))
       setHex(toHex(value))
-    } else if (base === 2) {
+    } else if (base === 2 && value) {
       let decimal = Flags.binToDec(value, registryLength, mode === Flags.SIGNED)
       setDecimal(decimal)
       setBinary(value)
@@ -179,7 +175,7 @@ export const FlagCalculator = () => {
                 <tr>
                   <th>C</th>
                   <td>{flags.c}</td>
-                  <td colSpan={2}>{flags.mode === Flags.UNSIGNED ? 'Carry / Borrow in SUB' : 'Irrelevant for signed operations'}</td>
+                  <td colSpan={2}>{flags.mode === Flags.UNSIGNED ? flags.operation === Flags.SUB ? 'Borrow' : 'Carry' : 'Irrelevant for signed operations'}</td>
                 </tr>
                 <tr>
                   <th>V</th>
