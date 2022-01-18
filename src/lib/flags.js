@@ -3,6 +3,33 @@ export const SUB = 1
 export const SIGNED = 0
 export const UNSIGNED = 1
 
+const OPERAND = 1
+const VALUE = 0
+
+const LSLS_Operation = {
+  displayName: 'Left Shift',
+  inputs: [
+    {
+      type: 3,
+      defaultValue: SIGNED,
+      displayName: 'Mode',
+      value: SIGNED
+    },
+    {
+      type: OPERAND,
+      defaultValue: 0,
+      displayName: 'Operand',
+      value: 0
+    },
+    {
+      type: VALUE,
+      defaultValue: 0,
+      displayName: 'Shift Amount',
+      value: 0
+    }
+  ]
+}
+
 const getNegativeFlag = input => input[0]
 const getZeroFlag = input => input.includes(1) ? 0 : 1
 const toBinaryArray = input => input.split('').map(i => parseInt(i))
@@ -51,7 +78,17 @@ export const exec = (a, b, operation, mode, registryLength) => {
   let resultDecimal = binToDec(resultBinary, registryLength, mode === SIGNED)
   let resultHex = resultDecimal >= 0 ? '0x' + resultDecimal.toString(16) : '-0x' + resultDecimal.toString(16).substring(1)
 
-  return { n, z, c, v, cs, b2c, resultBinary, resultDecimal, resultHex, mode, operation, registryLength }
+  return [
+    { displayName: 'N', value: n, note: n === 1 ? 'Result is negative' : 'Result is positive' },
+    { displayName: 'Z', value: z, note: z === 1 ? 'Result is zero' : 'Result is not zero' },
+    { displayName: 'C', value: c, note: mode === UNSIGNED ? operation === SUB ? 'Borrow' : 'Carry' : 'Irrelevant for signed operations' },
+    { displayName: 'V', value: v, note: mode === SIGNED ? 'Overflow' : 'Irrelevant for unsigned operations' },
+    { displayName: 'Carry Sequence (Übertrag)', value: cs },
+    { displayName: 'Twos complement of B (ZK)', value: b2c, hidden: operation !== SUB },
+    { displayName: 'Mode', value: mode === SIGNED ? 'Signed' : 'Unsigned' },
+    { displayName: 'Operation', value: operation === ADD ? 'ADDS' : 'SUBS' },
+    { displayName: 'Result', value: `0b${resultBinary}, ${resultDecimal}, ${resultHex}` }
+  ]
 }
 
 export const decToBin = (decVal, binaryLength) => {
@@ -83,7 +120,7 @@ export const decToBin = (decVal, binaryLength) => {
 }
 
 const getCarryAndOverflowFlag = (a, b, operation) => {
-  let c = 0, v = 0, cs = '', b2c= null
+  let c = 0, v = 0, cs = '', b2c = null
   let result = new Array(a.length)
 
   if (operation === SUB) {
